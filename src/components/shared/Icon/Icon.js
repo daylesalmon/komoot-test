@@ -1,21 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import svgSprite from 'assets/icons/icons-sprite.svg';
 
-const Icon = ({ iconClass, iconPath }) => {
+const Icon = ({ className, iconName }) => {
   return (
-    <svg className={iconClass}>
-      <use xlinkHref={iconPath} href={iconPath} />
+    <svg className={className}>
+      <use xlinkHref={`${svgSprite}#${iconName}`} href={`${svgSprite}#${iconName}`} />
     </svg>
   );
 };
 
 Icon.propTypes = {
-  iconPath: PropTypes.string.isRequired,
-  iconClass: PropTypes.string
+  iconName: PropTypes.string.isRequired,
+  className: PropTypes.string
 };
 
 Icon.defaultProps = {
-  iconClass: null
+  className: null
 };
 
 export default Icon;

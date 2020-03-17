@@ -1,3 +1,32 @@
 .waypoint {
   color: white;
 }
+
+.title {
+  font-weight: bold;
+  font-size: 18px;
+  margin-left: 15px;
+}
+
+.icon {
+  width: 25px;
+  height: 25px;
+  color: #747474;
+}
+
+.title,
+.icon {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.trash {
+  float: right;
+  background: 0;
+  border: 0;
+  cursor: pointer;
+
+  &:hover .icon {
+    color: #ff4545;
+  }
+}
