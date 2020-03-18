@@ -7,7 +7,7 @@ function App() {
 
   return (
     <>
-      <LeftPane /> <Map points={points} setPoints={setPoints} />
+      <LeftPane points={points} /> <Map points={points} setPoints={setPoints} />
     </>
   );
 }
