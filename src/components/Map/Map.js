@@ -29,10 +29,13 @@ const Map = () => {
       setPoints([...points, e.latlng]);
 
       console.log({ points });
+      const icon = L.divIcon({
+        className: s.circleIcon,
+        iconSize: 30,
+        html: points.length
+      });
 
-      L.marker(e.latlng, {
-        title: 'hello'
-      }).addTo(mapRef.current);
+      L.marker(e.latlng, { icon }).addTo(mapRef.current);
     };
 
     mapRef.current.on('click', onMapClick);
