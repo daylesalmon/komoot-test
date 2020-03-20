@@ -31,7 +31,7 @@ const Map = ({ points, setPoints }) => {
   useEffect(() => {
     // Set onclick Event
     const onMapClick = e => {
-      setPoints([...points, e.latlng]);
+      setPoints([...points, { id: points.length + 1, latlng: e.latlng }]);
       // Set up a divIcon
       const icon = L.divIcon({
         className: s.circleIcon,
@@ -52,7 +52,10 @@ const Map = ({ points, setPoints }) => {
   // useEffect for drawing polyLine
   useEffect(() => {
     // Add polyline based on the coords in state
-    L.polyline(points, { color: '#0d8ce7', weight: 10 }).addTo(mapRef.current);
+    L.polyline(
+      points.map(point => point.latlng),
+      { color: '#0d8ce7', weight: 10 }
+    ).addTo(mapRef.current);
   }, [points]);
 
   return <div id="map" className={s.map} ref={mapRef} title="Komoot map" />;

@@ -12,7 +12,7 @@ const LeftPane = ({ points }) => {
 
       <ul className={s.waypointList}>
         {points.map((point, index) => (
-          <Waypoint point={point} index={index} />
+          <Waypoint point={point} index={index} key={point.id} />
         ))}
       </ul>
     </div>
