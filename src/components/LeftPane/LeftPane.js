@@ -6,7 +6,11 @@ import s from './LeftPane.module.scss';
 import Waypoint from './Waypoint/Waypoint';
 
 const LeftPane = () => {
-  const [waypoints] = useContext(WaypointsContext);
+  const [waypoints, waypointsDispatch] = useContext(WaypointsContext);
+
+  const removeWayPoint = id => {
+    waypointsDispatch({ type: 'REMOVE_WAYPOINT', payload: id });
+  };
 
   return (
     <div className={s.leftPane}>
@@ -15,7 +19,7 @@ const LeftPane = () => {
 
       <ul className={s.waypointList}>
         {waypoints.map((point, index) => (
-          <Waypoint point={point} index={index} key={point.id} />
+          <Waypoint key={point.id} point={point} index={index} removeWayPoint={removeWayPoint} />
         ))}
       </ul>
     </div>

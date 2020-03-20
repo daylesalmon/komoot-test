@@ -45,9 +45,8 @@ const Map = () => {
 
       L.marker(e.latlng, { icon }).addTo(mapRef.current); // Create marker at clicked point, and add divIcon created above
     };
-    if (!mapRef.current) {
-      mapRef.current.on('click', onMapClick); // Event handler for map click
-    }
+
+    mapRef.current.on('click', onMapClick); // Event handler for map click
 
     return () => {
       mapRef.current.off('click', onMapClick); // Remove map click event handler

@@ -17,6 +17,10 @@ export const WaypointsProvider = props => {
         return newArr;
       }
 
+      case 'REMOVE_WAYPOINT': {
+        return state.filter(item => item.id !== action.payload);
+      }
+
       // Default should return intial state if error
       default:
         return initialState;
