@@ -12,10 +12,11 @@ export const WaypointsProvider = props => {
   const reducer = (state, action) => {
     // Update the point to chosen
     switch (action.type) {
-      case 'UPDATE_point':
-        return {
-          ...state
-        };
+      case 'ADD_WAYPOINT': {
+        const newArr = [...state, { id: state.length + 1, latlng: action.payload }];
+        return newArr;
+      }
+
       // Default should return intial state if error
       default:
         return initialState;

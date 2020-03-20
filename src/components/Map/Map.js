@@ -1,10 +1,13 @@
-import React, { useEffect, useRef } from 'react';
-import PropTypes from 'prop-types';
+import React, { useEffect, useRef, useContext } from 'react';
 import L from 'leaflet';
+// Import context
+import { WaypointsContext } from 'globalState/WaypointsContext';
+// Import styles
 import s from './Map.module.scss';
 
-const Map = ({ points, setPoints }) => {
+const Map = () => {
   const mapRef = useRef(null);
+  const [waypoints, waypointsDispatch] = useContext(WaypointsContext);
 
   // useEffect to set map up
   useEffect(() => {
@@ -31,39 +34,36 @@ const Map = ({ points, setPoints }) => {
   useEffect(() => {
     // Set onclick Event
     const onMapClick = e => {
-      setPoints([...points, { id: points.length + 1, latlng: e.latlng }]);
+      // waypointsDispatch([...waypoints, { id: waypoints.length + 1, latlng: e.latlng }]);
+      waypointsDispatch({ type: 'ADD_WAYPOINT', payload: e.latlng });
       // Set up a divIcon
       const icon = L.divIcon({
         className: s.circleIcon,
         iconSize: 30,
-        html: points.length + 1
+        html: waypoints.length + 1
       });
 
       L.marker(e.latlng, { icon }).addTo(mapRef.current); // Create marker at clicked point, and add divIcon created above
     };
-
-    mapRef.current.on('click', onMapClick); // Event handler for map click
+    if (!mapRef.current) {
+      mapRef.current.on('click', onMapClick); // Event handler for map click
+    }
 
     return () => {
       mapRef.current.off('click', onMapClick); // Remove map click event handler
     };
-  }, [points, setPoints]);
+  }, [waypoints, waypointsDispatch]);
 
   // useEffect for drawing polyLine
   useEffect(() => {
     // Add polyline based on the coords in state
     L.polyline(
-      points.map(point => point.latlng),
+      waypoints.map(point => point.latlng),
       { color: '#0d8ce7', weight: 10 }
     ).addTo(mapRef.current);
-  }, [points]);
+  }, [waypoints]);
 
   return <div id="map" className={s.map} ref={mapRef} title="Komoot map" />;
-};
-
-Map.propTypes = {
-  points: PropTypes.arrayOf(PropTypes.object).isRequired,
-  setPoints: PropTypes.func.isRequired
 };
 
 export default Map;
