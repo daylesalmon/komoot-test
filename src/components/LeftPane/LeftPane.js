@@ -11,8 +11,8 @@ const LeftPane = ({ points }) => {
       <hr className={s.hr} />
 
       <ul className={s.waypointList}>
-        {points.map(point => (
-          <Waypoint point={point} />
+        {points.map((point, index) => (
+          <Waypoint point={point} index={index} />
         ))}
       </ul>
     </div>
@@ -20,7 +20,7 @@ const LeftPane = ({ points }) => {
 };
 
 LeftPane.propTypes = {
-  points: PropTypes.shape.isRequired
+  points: PropTypes.arrayOf(PropTypes.object).isRequired
 };
 
 export default LeftPane;

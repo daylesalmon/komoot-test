@@ -59,7 +59,7 @@ const Map = ({ points, setPoints }) => {
 };
 
 Map.propTypes = {
-  points: PropTypes.shape.isRequired,
+  points: PropTypes.arrayOf(PropTypes.object).isRequired,
   setPoints: PropTypes.func.isRequired
 };
 
