@@ -16,18 +16,23 @@ const LeftPane = () => {
 
   useEffect(() => {
     // Set up xml for gpx file (loop through each latlng and put in as a trkpnt)
-    const gpxData = `
-    <?xml version="1.0" encoding="UTF-8"?>
-      <gpx creator="Komoot Route Builder" version="1.0">
-        <trk>
-          <name>Example gpx route</name>
-          <trkseg>
-          ${waypoints.map(
-            waypoint => `<trkpt lat="${waypoint.latlng.lat}" lon="${waypoint.latlng.lng}"></trkpt>`
-          )}
-          </trkseg>
-        </trk>
-      </gpx>`.replace(/\s/g, ''); // Replace all spaces with nothing (whitespace trim)
+    const gpxData = `<?xml version="1.0" encoding="UTF-8"?>
+    <gpx creator="Komoot Route Builder" version="1.0">
+      <trk>
+        <name>Example gpx route</name>
+        <trkseg>
+          ${waypoints
+            .map(
+              (waypoint, index) =>
+                `<trkpt lat="${waypoint.latlng.lat}" lon="${waypoint.latlng.lng}"><name>${index +
+                  1}</name></trkpt>`
+            )
+            .join('')}
+        </trkseg>
+      </trk>
+    </gpx>`; // Replace all spaces with nothing (whitespace trim)
+
+    console.log({ gpxData });
 
     setGpxFile(`data:text/xml;charset=utf-8,${encodeURIComponent(gpxData)}`); // Update state of our gpx file which is used by button below
   }, [waypoints]);
