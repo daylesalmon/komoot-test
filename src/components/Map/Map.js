@@ -71,7 +71,6 @@ const Map = () => {
       // Create marker at clicked point, and add divIcon created above
       layerGroup = L.layerGroup(waypointsArr).addTo(mapRef.current);
     }
-    console.log(layerGroup.toGeoJSON());
 
     return () => {
       layerGroup.clearLayers(); // Clear layers on unmount/update
