@@ -2,6 +2,14 @@
   color: white;
   overflow: hidden;
   margin-bottom: 20px;
+  z-index: 1;
+  position: relative;
+
+  &.beingDragged {
+    -webkit-grabbing: '-webkit-grab';
+    position: absolute;
+    z-index: 2;
+  }
 }
 
 .title {
