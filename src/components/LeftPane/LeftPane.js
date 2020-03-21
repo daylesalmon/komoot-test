@@ -15,6 +15,7 @@ const LeftPane = () => {
   };
 
   useEffect(() => {
+    // Set up xml for gpx file (loop through each latlng and put in as a trkpnt)
     const gpxData = `
     <?xml version="1.0" encoding="UTF-8"?>
       <gpx creator="Komoot Route Builder" version="1.0">
@@ -26,8 +27,9 @@ const LeftPane = () => {
           )}
           </trkseg>
         </trk>
-      </gpx>`;
-    setGpxFile(`data:text/xml;charset=utf-8,${encodeURIComponent(gpxData)}`);
+      </gpx>`.replace(/\s/g, ''); // Replace all spaces with nothing (whitespace trim)
+
+    setGpxFile(`data:text/xml;charset=utf-8,${encodeURIComponent(gpxData)}`); // Update state of our gpx file which is used by button below
   }, [waypoints]);
 
   return (
@@ -40,8 +42,8 @@ const LeftPane = () => {
         ))}
       </ul>
       {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-      <a href={gpxFile} download="MyTracks.gpx">
-        Export to file
+      <a href={gpxFile} download="my-komoot-route.gpx" className={s.downloadRouteBtn}>
+        Download your route
       </a>
     </div>
   );
