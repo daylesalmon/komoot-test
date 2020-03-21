@@ -15,11 +15,20 @@ const LeftPane = () => {
   };
 
   useEffect(() => {
-    const gpxData = '<gpx creator="" version="1.0"></gpx>';
+    const gpxData = `
+    <?xml version="1.0" encoding="UTF-8"?>
+      <gpx creator="Komoot Route Builder" version="1.0">
+        <trk>
+          <name>Example gpx route</name>
+          <trkseg>
+          ${waypoints.map(
+            waypoint => `<trkpt lat="${waypoint.latlng.lat}" lon="${waypoint.latlng.lng}"></trkpt>`
+          )}
+          </trkseg>
+        </trk>
+      </gpx>`;
     setGpxFile(`data:text/xml;charset=utf-8,${encodeURIComponent(gpxData)}`);
-  }, []);
-
-  console.log({ gpxFile });
+  }, [waypoints]);
 
   return (
     <div className={s.leftPane}>
