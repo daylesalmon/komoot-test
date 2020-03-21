@@ -59,25 +59,32 @@ const Map = () => {
       });
     };
 
+    let layerGroup;
+
     if (waypoints) {
       const waypointsArr = waypoints.map(wp =>
         L.marker(wp.latlng, { icon: icon(wp.id) }).addTo(mapRef.current)
       );
       // Create marker at clicked point, and add divIcon created above
-      L.layerGroup(waypointsArr);
+      layerGroup = L.layerGroup(waypointsArr).addTo(mapRef.current);
     }
-    // return () => {
-    //   cleanup;
-    // };
+
+    return () => {
+      layerGroup.clearLayers();
+    };
   }, [waypoints, waypoints.length]);
 
   // useEffect for drawing polyLine
   useEffect(() => {
     // Add polyline based on the coords in state
-    L.polyline(
+    const polyline = L.polyline(
       waypoints.map(point => point.latlng),
       { color: '#0d8ce7', weight: 10 }
     ).addTo(mapRef.current);
+
+    return () => {
+      polyline.remove();
+    };
   }, [waypoints]);
 
   return <div id="map" className={s.map} ref={mapRef} title="Komoot map" />;
