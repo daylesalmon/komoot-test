@@ -16,6 +16,7 @@ export const WaypointsProvider = props => {
         const newArr = [...state, { id: action.payload.id, latlng: action.payload.latlng }];
         return newArr;
       }
+
       // Remove the waypoint by the id
       case 'REMOVE_WAYPOINT': {
         return state.filter(item => item.id !== action.payload);
