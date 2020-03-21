@@ -32,10 +32,9 @@ const Map = () => {
 
   // useEffect for click event/markers
   useEffect(() => {
-    const id = waypoints.length + 1;
-
     // Set onclick Event
     const onMapClick = e => {
+      const id = e.originalEvent.timeStamp; // Give each item a unique id based on click timestamp
       waypointsDispatch({
         type: 'ADD_WAYPOINT',
         payload: { id, latlng: e.latlng }
@@ -51,26 +50,26 @@ const Map = () => {
 
   useEffect(() => {
     // Set up a divIcon
-    const icon = id => {
+    const icon = index => {
       return L.divIcon({
         className: s.circleIcon,
         iconSize: 30,
-        html: id
+        html: index
       });
     };
 
     let layerGroup;
 
     if (waypoints) {
-      const waypointsArr = waypoints.map(wp =>
-        L.marker(wp.latlng, { icon: icon(wp.id) }).addTo(mapRef.current)
+      const waypointsArr = waypoints.map((wp, index) =>
+        L.marker(wp.latlng, { icon: icon(index + 1) }).addTo(mapRef.current)
       );
       // Create marker at clicked point, and add divIcon created above
       layerGroup = L.layerGroup(waypointsArr).addTo(mapRef.current);
     }
 
     return () => {
-      layerGroup.clearLayers();
+      layerGroup.remove();
     };
   }, [waypoints, waypoints.length]);
 
