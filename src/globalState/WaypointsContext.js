@@ -13,10 +13,10 @@ export const WaypointsProvider = props => {
     // Update the point to chosen
     switch (action.type) {
       case 'ADD_WAYPOINT': {
-        const newArr = [...state, { id: state.length + 1, latlng: action.payload }];
+        const newArr = [...state, { id: action.payload.id, latlng: action.payload.latlng }];
         return newArr;
       }
-
+      // Remove the waypoint by the id
       case 'REMOVE_WAYPOINT': {
         return state.filter(item => item.id !== action.payload);
       }

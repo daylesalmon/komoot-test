@@ -8,6 +8,7 @@ import Waypoint from './Waypoint/Waypoint';
 const LeftPane = () => {
   const [waypoints, waypointsDispatch] = useContext(WaypointsContext);
 
+  // Remove the waypoint by the id
   const removeWayPoint = id => {
     waypointsDispatch({ type: 'REMOVE_WAYPOINT', payload: id });
   };

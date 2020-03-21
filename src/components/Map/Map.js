@@ -32,18 +32,14 @@ const Map = () => {
 
   // useEffect for click event/markers
   useEffect(() => {
+    const id = waypoints.length + 1;
+
     // Set onclick Event
     const onMapClick = e => {
-      // waypointsDispatch([...waypoints, { id: waypoints.length + 1, latlng: e.latlng }]);
-      waypointsDispatch({ type: 'ADD_WAYPOINT', payload: e.latlng });
-      // Set up a divIcon
-      const icon = L.divIcon({
-        className: s.circleIcon,
-        iconSize: 30,
-        html: waypoints.length + 1
+      waypointsDispatch({
+        type: 'ADD_WAYPOINT',
+        payload: { id, latlng: e.latlng }
       });
-
-      L.marker(e.latlng, { icon }).addTo(mapRef.current); // Create marker at clicked point, and add divIcon created above
     };
 
     mapRef.current.on('click', onMapClick); // Event handler for map click
@@ -52,6 +48,28 @@ const Map = () => {
       mapRef.current.off('click', onMapClick); // Remove map click event handler
     };
   }, [waypoints, waypointsDispatch]);
+
+  useEffect(() => {
+    // Set up a divIcon
+    const icon = id => {
+      return L.divIcon({
+        className: s.circleIcon,
+        iconSize: 30,
+        html: id
+      });
+    };
+
+    if (waypoints) {
+      const waypointsArr = waypoints.map(wp =>
+        L.marker(wp.latlng, { icon: icon(wp.id) }).addTo(mapRef.current)
+      );
+      // Create marker at clicked point, and add divIcon created above
+      L.layerGroup(waypointsArr);
+    }
+    // return () => {
+    //   cleanup;
+    // };
+  }, [waypoints, waypoints.length]);
 
   // useEffect for drawing polyLine
   useEffect(() => {
