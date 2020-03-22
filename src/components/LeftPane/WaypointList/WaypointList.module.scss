@@ -9,11 +9,18 @@
   margin-bottom: 20px;
   z-index: 1;
   position: relative;
+  border: 1px solid transparent;
+  padding: 5px;
 
   &.isDragging {
     -webkit-grabbing: '-webkit-grab';
     color: #172200;
     background-color: #c3e451;
+    opacity: 0.4;
+  }
+
+  &.isDraggedIn {
+    border: 1px dashed white;
   }
 }
 

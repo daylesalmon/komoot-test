@@ -7,7 +7,7 @@ import s from './Map.module.scss';
 
 const Map = () => {
   const mapRef = useRef(null);
-  const [waypoints, waypointsDispatch] = useContext(WaypointsContext);
+  const [waypoints, waypointsDispatch] = useContext(WaypointsContext); // Get the state of waypoints from WaypointsContext
 
   // useEffect to set map up
   useEffect(() => {
