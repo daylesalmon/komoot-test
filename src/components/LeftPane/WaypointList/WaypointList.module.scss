@@ -10,10 +10,10 @@
   z-index: 1;
   position: relative;
 
-  &.beingDragged {
+  &.isDragging {
     -webkit-grabbing: '-webkit-grab';
-    position: absolute;
-    z-index: 2;
+    color: #172200;
+    background-color: #c3e451;
   }
 }
 

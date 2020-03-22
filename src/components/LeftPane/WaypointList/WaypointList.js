@@ -22,7 +22,8 @@ const WaypointList = () => {
     e.dataTransfer.setDragImage(e.target.parentNode, 20, 20);
   };
 
-  const onDragOver = ind => {
+  const onDragOver = (e, ind) => {
+    e.preventDefault();
     const draggedOverItem = waypoints[ind];
 
     // if the item is dragged over itself, ignore
@@ -39,16 +40,24 @@ const WaypointList = () => {
     waypointsDispatch({ type: 'REORDER_WAYPOINTS', payload: items });
   };
 
+  const onDragEnd = () => {
+    setDraggedItem(null);
+  };
+
   return (
     <ul className={s.waypointList}>
       {waypoints.length > 0 &&
         waypoints.map((point, index) => (
-          <li key={point.id} className={`${s.waypoint}`} onDragOver={() => onDragOver(index)}>
+          <li
+            key={point.id}
+            className={`${s.waypoint} ${draggedItem === point ? s.isDragging : ''}`}
+            onDragOver={e => onDragOver(e, index)}
+          >
             <div
               className={s.bars}
               draggable="true"
               onDragStart={e => onDragStart(e, index)}
-              onDragEnd={() => setDraggedItem(null)}
+              onDragEnd={e => onDragEnd(e)}
             >
               <Icon iconName="bars" className={s.icon} />
             </div>
