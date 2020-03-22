@@ -36,9 +36,11 @@ const LeftPane = () => {
       <h1 className={s.title}>Route Builder</h1>
       <hr className={s.hr} />
       <WaypointList />
-      <a href={gpxFile} download="my-komoot-route.gpx" className={s.downloadRouteBtn}>
-        Download your route
-      </a>
+      {waypoints.length > 0 && (
+        <a href={gpxFile} download="my-komoot-route.gpx" className={s.downloadRouteBtn}>
+          Download your route
+        </a>
+      )}
     </div>
   );
 };
