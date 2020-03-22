@@ -23,7 +23,6 @@ export const WaypointsProvider = props => {
       }
 
       case 'REORDER_WAYPOINTS': {
-        console.log(action.payload);
         return action.payload;
       }
 

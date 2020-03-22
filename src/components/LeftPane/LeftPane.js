@@ -1,18 +1,14 @@
 import React, { useContext, useState, useEffect } from 'react';
 // Import context
 import { WaypointsContext } from 'globalState/WaypointsContext';
-
+// Import components
+import WaypointList from './WaypointList/WaypointList';
+// Import styles
 import s from './LeftPane.module.scss';
-import Waypoint from './Waypoint/Waypoint';
 
 const LeftPane = () => {
-  const [waypoints, waypointsDispatch] = useContext(WaypointsContext);
+  const [waypoints] = useContext(WaypointsContext);
   const [gpxFile, setGpxFile] = useState();
-
-  // Remove the waypoint by the id
-  const removeWayPoint = id => {
-    waypointsDispatch({ type: 'REMOVE_WAYPOINT', payload: id });
-  };
 
   useEffect(() => {
     // Set up xml for gpx file (loop through each latlng and put in as a trkpnt / join '' so it doesn't add comma)
@@ -39,13 +35,7 @@ const LeftPane = () => {
     <div className={s.leftPane}>
       <h1 className={s.title}>Route Builder</h1>
       <hr className={s.hr} />
-      <ul className={s.waypointList}>
-        {waypoints.length &&
-          waypoints.map((point, index) => (
-            <Waypoint key={point.id} point={point} index={index} removeWayPoint={removeWayPoint} />
-          ))}
-      </ul>
-      {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+      <WaypointList />
       <a href={gpxFile} download="my-komoot-route.gpx" className={s.downloadRouteBtn}>
         Download your route
       </a>
