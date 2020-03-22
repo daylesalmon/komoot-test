@@ -1,68 +1,55 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 // Import context
+import { WaypointsContext } from 'globalState/WaypointsContext';
 // Import components
 import Icon from 'components/shared/Icon/Icon';
 // Import styles
 import s from './Waypoint.module.scss';
 
-const position = { x: 0, y: 0 };
-
 const Waypoint = ({ index, point, removeWayPoint }) => {
-  const [wpState, setWpState] = useState({
-    isDragging: false,
-    origin: position,
-    translation: position
-  });
+  const [draggedItem, setDraggedItem] = useState();
+  const [waypoints, waypointsDispatch] = useContext(WaypointsContext);
 
-  const handleMouseDown = ({ clientX, clientY }) => {
-    setWpState(state => ({
-      ...state,
-      isDragging: true,
-      origin: { x: clientX, y: clientY }
-    }));
+  const onDragStart = (e, ind) => {
+    setDraggedItem(waypoints[ind]);
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/html', e.parentNode);
+    e.dataTransfer.setDragImage(e.target.parentNode, 20, 20);
   };
 
-  useEffect(() => {
-    const handleMouseUp = () => {
-      setWpState(state => ({
-        ...state,
-        isDragging: false,
-        translation: position
-      }));
-    };
+  const onDragOver = ind => {
+    const draggedOverItem = waypoints[ind];
 
-    const handleMouseMove = ({ clientX, clientY }) => {
-      const translation = { x: clientX - wpState.origin.x, y: clientY - wpState.origin.y };
-
-      setWpState(state => ({
-        ...state,
-        translation
-      }));
-    };
-
-    if (wpState.isDragging) {
-      window.addEventListener('mousemove', handleMouseMove);
-      window.addEventListener('mouseup', handleMouseUp);
-    } else {
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mouseup', handleMouseUp);
-      console.log('here');
-      setWpState(state => ({ ...state, translation: position }));
+    // if the item is dragged over itself, ignore
+    if (draggedItem === draggedOverItem) {
+      return;
     }
-    // return () => {
-    //   cleanup;
-    // };
-  }, [wpState.isDragging, wpState.origin.x, wpState.origin.y]);
+
+    // filter out the currently dragged item
+    const items = waypoints.filter(item => item !== draggedItem);
+
+    // add the dragged item after the dragged over item
+    items.splice(ind, 0, draggedItem);
+
+    waypointsDispatch({ type: 'REORDER_WAYPOINTS', payload: items });
+  };
+
+  const onDragEnd = e => {
+    console.log({ e });
+  };
 
   return (
     // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
-    <li
-      className={`${s.waypoint} ${wpState.isDragging ? s.beingDragged : ''}`}
-      draggable="true"
-      onMouseDown={handleMouseDown}
-    >
-      <Icon iconName="bars" className={s.icon} />
+    <li className={`${s.waypoint}`} onDragOver={() => onDragOver(index)}>
+      <div
+        className={s.bars}
+        draggable="true"
+        onDragStart={(e, ind) => onDragStart(e, ind)}
+        onDragEnd={e => onDragEnd(e)}
+      >
+        <Icon iconName="bars" className={s.icon} />
+      </div>
       <span className={s.title}>Waypoint {index + 1}</span>
       <button type="button" className={s.trash} onClick={() => removeWayPoint(point.id)}>
         <Icon iconName="trash" className={s.icon} />

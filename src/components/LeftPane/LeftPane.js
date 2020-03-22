@@ -40,9 +40,10 @@ const LeftPane = () => {
       <h1 className={s.title}>Route Builder</h1>
       <hr className={s.hr} />
       <ul className={s.waypointList}>
-        {waypoints.map((point, index) => (
-          <Waypoint key={point.id} point={point} index={index} removeWayPoint={removeWayPoint} />
-        ))}
+        {waypoints.length &&
+          waypoints.map((point, index) => (
+            <Waypoint key={point.id} point={point} index={index} removeWayPoint={removeWayPoint} />
+          ))}
       </ul>
       {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
       <a href={gpxFile} download="my-komoot-route.gpx" className={s.downloadRouteBtn}>

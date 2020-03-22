@@ -22,6 +22,11 @@ export const WaypointsProvider = props => {
         return state.filter(item => item.id !== action.payload);
       }
 
+      case 'REORDER_WAYPOINTS': {
+        console.log(action.payload);
+        return action.payload;
+      }
+
       // Default should return intial state if error
       default:
         return initialState;
