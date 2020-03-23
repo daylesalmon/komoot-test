@@ -16,17 +16,18 @@
 }
 
 .downloadRouteBtn {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  width: calc(100% - 40px);
   display: block;
+  padding: 10px;
+  background-color: #c3e451;
+  color: #172200;
+  border: 0;
+  border-radius: 10px;
   text-decoration: none;
   text-align: center;
   font-weight: bold;
   font-size: 18px;
-  background-color: #c3e451;
-  color: #172200;
-  padding: 10px;
-  border-radius: 10px;
-  position: absolute;
-  bottom: 20px;
-  left: 20px;
-  width: calc(100% - 60px);
 }
