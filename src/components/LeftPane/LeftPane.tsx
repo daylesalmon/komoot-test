@@ -1,10 +1,18 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 // Import context
 import { WaypointsContext } from 'globalState/WaypointsContext';
 // Import components
 import WaypointList from './WaypointList/WaypointList';
 // Import styles
 import s from './LeftPane.module.scss';
+
+interface Waypoint{
+  id: number;
+  latlng: {
+    lat: number;
+    lng: number;
+  };
+}
 
 const LeftPane = () => {
   const [waypoints] = useContext(WaypointsContext);
@@ -18,9 +26,9 @@ const LeftPane = () => {
         <trkseg>
           ${waypoints
             .map(
-              (waypoint, index) =>
+              (waypoint: Waypoint, index: number) =>
                 `<trkpt lat="${waypoint.latlng.lat}" lon="${waypoint.latlng.lng}"><name>${
-                  index + 1
+                  index += 1
                 }</name></trkpt>`
             )
             .join('\n')}

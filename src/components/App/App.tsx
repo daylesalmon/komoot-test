@@ -4,7 +4,6 @@ import Map from 'components/Map/Map';
 import { WaypointsProvider } from 'globalState/WaypointsContext';
 
 function App() {
-  console.log('hello');
   return (
     <React.StrictMode>
       <WaypointsProvider>

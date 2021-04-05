@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import { useContext, useState } from 'react';
 // Import context
 import { WaypointsContext } from 'globalState/WaypointsContext';
 // Import components
@@ -6,24 +6,41 @@ import Icon from 'components/shared/Icon/Icon';
 // Import styles
 import s from './WaypointList.module.scss';
 
+type ParentNode = HTMLElement | undefined;
+
+interface OnDragEvent<T> extends React.DragEvent<T> {
+  target: {
+    parentNode?: ParentNode;
+  } | any;
+  parentNode?: ParentNode;
+}
+
+interface Waypoint{
+  id: number;
+  latlng: {
+    lat: number;
+    lng: number;
+  };
+}
+
 const WaypointList = () => {
   const [waypoints, waypointsDispatch] = useContext(WaypointsContext); // Get the state of waypoints from WaypointsContext
 
   // State for managing dragable list below
-  const [draggedItem, setDraggedItem] = useState();
+  const [draggedItem, setDraggedItem]  = useState(null) ;
   const [dragEntered, setDragEntered] = useState(false);
 
   // DRAG EVENTS FOR LIST REORDERING
   // Dragstart
-  const onDragStart = (e, ind) => {
+  const onDragStart = (e: OnDragEvent<HTMLDivElement>, ind: number)  => {
     setDraggedItem(waypoints[ind]);
     e.dataTransfer.effectAllowed = 'move';
-    e.dataTransfer.setData('text/html', e.parentNode);
+    e.dataTransfer.setData('text/html', (typeof e.parentNode !== 'undefined' ? e.parentNode.toString() : ''));
     e.dataTransfer.setDragImage(e.target.parentNode, 20, 20);
   };
 
   // Dragover
-  const onDragOver = (e, ind) => {
+  const onDragOver = (e: OnDragEvent<HTMLDivElement | HTMLLIElement>, ind: number) => {
     e.preventDefault(); // This allows the draggedover to be dropped on
     const draggedOverItem = waypoints[ind]; // Set dragged over to the index it is in state
 
@@ -32,7 +49,7 @@ const WaypointList = () => {
       return;
     }
 
-    const items = waypoints.filter(item => item !== draggedItem); // filter out the currently dragged item
+    const items = waypoints.filter((item: Waypoint) => item !== draggedItem); // filter out the currently dragged item
     items.splice(ind, 0, draggedItem); // add the dragged item after the dragged over item
 
     waypointsDispatch({ type: 'REORDER_WAYPOINTS', payload: items }); // Update state with new order items
@@ -52,14 +69,14 @@ const WaypointList = () => {
   // END DRAG EVENTS
 
   // Remove the waypoint by the id
-  const removeWayPoint = id => {
+  const removeWayPoint = (id: number) => {
     waypointsDispatch({ type: 'REMOVE_WAYPOINT', payload: id });
   };
 
   return (
     <ul className={s.waypointList}>
       {waypoints.length > 0 &&
-        waypoints.map((point, index) => (
+        waypoints.map((point: Waypoint, index: number) => (
           <li
             key={point.id}
             className={`${s.waypoint} ${draggedItem === point ? s.isDragging : ''} ${
@@ -72,7 +89,7 @@ const WaypointList = () => {
               className={s.bars}
               draggable="true"
               onDragStart={e => onDragStart(e, index)}
-              onDragEnd={e => onDragEnd(e)}
+              onDragEnd={() => onDragEnd()}
             >
               <Icon iconName="bars" className={s.icon} />
             </div>
