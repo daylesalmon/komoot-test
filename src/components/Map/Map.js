@@ -17,9 +17,9 @@ const Map = () => {
       // Set layer to OSM (free)
       layers: [
         L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-          attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-        })
-      ]
+          attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+        }),
+      ],
     });
 
     // remove map if 'unmount'
@@ -38,7 +38,7 @@ const Map = () => {
       // Call waypoints dispatcher to add to state
       waypointsDispatch({
         type: 'ADD_WAYPOINT',
-        payload: { id, latlng: e.latlng }
+        payload: { id, latlng: e.latlng },
       });
     };
 
@@ -56,7 +56,7 @@ const Map = () => {
       return L.divIcon({
         className: s.circleIcon,
         iconSize: 30,
-        html // This will be set from the index below
+        html, // This will be set from the index below
       });
     };
 

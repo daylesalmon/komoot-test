@@ -12,11 +12,11 @@ const Icon = ({ className, iconName }) => {
 
 Icon.propTypes = {
   iconName: PropTypes.string.isRequired,
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 Icon.defaultProps = {
-  className: null
+  className: null,
 };
 
 export default Icon;

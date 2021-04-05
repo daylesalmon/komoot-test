@@ -19,8 +19,9 @@ const LeftPane = () => {
           ${waypoints
             .map(
               (waypoint, index) =>
-                `<trkpt lat="${waypoint.latlng.lat}" lon="${waypoint.latlng.lng}"><name>${index +
-                  1}</name></trkpt>`
+                `<trkpt lat="${waypoint.latlng.lat}" lon="${waypoint.latlng.lng}"><name>${
+                  index + 1
+                }</name></trkpt>`
             )
             .join('\n')}
         </trkseg>
