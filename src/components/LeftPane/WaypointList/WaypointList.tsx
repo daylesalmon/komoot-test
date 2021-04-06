@@ -3,6 +3,8 @@ import { useContext, useState } from 'react';
 import { WaypointsContext } from 'globalState/WaypointsContext';
 // Import components
 import Icon from 'components/shared/Icon/Icon';
+// Types
+import { Waypoint } from 'globalState/WaypointsContext.d';
 // Import styles
 import s from './WaypointList.module.scss';
 
@@ -15,14 +17,6 @@ interface OnDragEvent<T> extends React.DragEvent<T> {
       }
     | any;
   parentNode?: ParentNode;
-}
-
-interface Waypoint {
-  id: number;
-  latlng: {
-    lat: number;
-    lng: number;
-  };
 }
 
 const WaypointList = () => {

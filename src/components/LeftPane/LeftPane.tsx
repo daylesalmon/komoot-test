@@ -3,16 +3,10 @@ import { useContext } from 'react';
 import { WaypointsContext } from 'globalState/WaypointsContext';
 // Import components
 import WaypointList from './WaypointList/WaypointList';
+// Types
+import { Waypoint } from 'globalState/WaypointsContext.d';
 // Import styles
 import s from './LeftPane.module.scss';
-
-interface Waypoint {
-  id: number;
-  latlng: {
-    lat: number;
-    lng: number;
-  };
-}
 
 const LeftPane = () => {
   const [waypoints] = useContext(WaypointsContext);

@@ -1,14 +1,7 @@
 import React, { useReducer, createContext } from 'react';
+import { Waypoint, Waypoints } from './WaypointsContext.d';
 
-interface Waypoint {
-  id: number;
-  latlng: {
-    lat: number;
-    lng: number;
-  };
-}
-
-type WaypointsContextState = [[] | Waypoint[], React.Dispatch<Actions>];
+type WaypointsContextState = [Waypoints, React.Dispatch<Actions>];
 
 type Actions =
   | {
@@ -17,22 +10,24 @@ type Actions =
     }
   | { payload: number; type: 'REMOVE_WAYPOINT' }
   | {
-      payload: Waypoint[];
+      payload: Waypoints;
       type: 'REORDER_WAYPOINTS';
     };
 
-type State = Waypoint[];
+interface WayPointsProviderProps {
+  children: React.ReactNode;
+}
 
 const intialContextState: WaypointsContextState = [[], () => null];
 
 export const WaypointsContext = createContext<WaypointsContextState>(intialContextState); // Create when context
 
-export const WaypointsProvider: React.FC = ({ children }) => {
+export const WaypointsProvider = ({ children }: WayPointsProviderProps) => {
   // Set intial state of when
-  const initialState: Waypoint[] | [] = [];
+  const initialState: Waypoints = [];
 
   // Set up a reducer so we can change state based on centralised logic here
-  const reducer = (state: State, action: Actions) => {
+  const reducer = (state: Waypoints, action: Actions) => {
     // Update the point to chosen
     switch (action.type) {
       case 'ADD_WAYPOINT': {
