@@ -1,12 +1,12 @@
-import React, { useEffect, useRef, useContext } from 'react';
-import L from 'leaflet';
+import { useEffect, useRef, useContext } from 'react';
+import L, { map } from 'leaflet';
 // Import context
 import { WaypointsContext } from 'globalState/WaypointsContext';
 // Import styles
 import s from './Map.module.scss';
 
 const Map = () => {
-  const mapRef = useRef(null);
+  const mapRef = useRef<L.Map | null>(null);
   const [waypoints, waypointsDispatch] = useContext(WaypointsContext); // Get the state of waypoints from WaypointsContext
 
   // useEffect to set map up
@@ -42,10 +42,10 @@ const Map = () => {
       });
     };
 
-    mapRef.current.on('click', onMapClick); // Event handler for map click
+    if (mapRef.current) mapRef.current.on('click', onMapClick); // Event handler for map click
 
     return () => {
-      mapRef.current.off('click', onMapClick); // Remove map click event handler
+      if (mapRef.current) mapRef.current.off('click', onMapClick); // Remove map click event handler
     };
   }, [waypoints, waypointsDispatch]);
 
