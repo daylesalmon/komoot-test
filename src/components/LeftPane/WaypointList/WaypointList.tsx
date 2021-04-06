@@ -9,13 +9,15 @@ import s from './WaypointList.module.scss';
 type ParentNode = HTMLElement | undefined;
 
 interface OnDragEvent<T> extends React.DragEvent<T> {
-  target: {
-    parentNode?: ParentNode;
-  } | any;
+  target:
+    | {
+        parentNode?: ParentNode;
+      }
+    | any;
   parentNode?: ParentNode;
 }
 
-interface Waypoint{
+interface Waypoint {
   id: number;
   latlng: {
     lat: number;
@@ -27,15 +29,18 @@ const WaypointList = () => {
   const [waypoints, waypointsDispatch] = useContext(WaypointsContext); // Get the state of waypoints from WaypointsContext
 
   // State for managing dragable list below
-  const [draggedItem, setDraggedItem]  = useState(null) ;
+  const [draggedItem, setDraggedItem] = useState<null | Waypoint>(null);
   const [dragEntered, setDragEntered] = useState(false);
 
   // DRAG EVENTS FOR LIST REORDERING
   // Dragstart
-  const onDragStart = (e: OnDragEvent<HTMLDivElement>, ind: number)  => {
+  const onDragStart = (e: OnDragEvent<HTMLDivElement>, ind: number) => {
     setDraggedItem(waypoints[ind]);
     e.dataTransfer.effectAllowed = 'move';
-    e.dataTransfer.setData('text/html', (typeof e.parentNode !== 'undefined' ? e.parentNode.toString() : ''));
+    e.dataTransfer.setData(
+      'text/html',
+      typeof e.parentNode !== 'undefined' ? e.parentNode.toString() : ''
+    );
     e.dataTransfer.setDragImage(e.target.parentNode, 20, 20);
   };
 
@@ -51,6 +56,8 @@ const WaypointList = () => {
 
     const items = waypoints.filter((item: Waypoint) => item !== draggedItem); // filter out the currently dragged item
     items.splice(ind, 0, draggedItem); // add the dragged item after the dragged over item
+
+    console.log();
 
     waypointsDispatch({ type: 'REORDER_WAYPOINTS', payload: items }); // Update state with new order items
   };
