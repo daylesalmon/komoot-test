@@ -55,7 +55,7 @@ const WaypointList = () => {
     }
 
     const items = waypoints.filter((item: Waypoint) => item !== draggedItem); // filter out the currently dragged item
-    items.splice(ind, 0, draggedItem); // add the dragged item after the dragged over item
+    if (draggedItem) items.splice(ind, 0, draggedItem); // add the dragged item after the dragged over item
 
     console.log();
 

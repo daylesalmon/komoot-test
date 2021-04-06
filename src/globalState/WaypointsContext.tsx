@@ -7,6 +7,9 @@ interface Waypoint {
     lng: number;
   };
 }
+
+type WaypointsContextState = [[] | Waypoint[], React.Dispatch<Actions>];
+
 type Actions =
   | {
       payload: Waypoint;
@@ -18,23 +21,11 @@ type Actions =
       type: 'REORDER_WAYPOINTS';
     };
 
-type WaypointsContextState = {
-  state: [] | Waypoint[];
-  dispatch: React.Dispatch<Actions>;
-} | null;
+type State = Waypoint[];
 
-const intialContextState: WaypointsContextState = {
-  state: [],
-  dispatch: () => null,
-};
+const intialContextState: WaypointsContextState = [[], () => null];
 
 export const WaypointsContext = createContext<WaypointsContextState>(intialContextState); // Create when context
-
-// interface Props {
-//   children: ReactChildren
-// }
-
-type State = Waypoint[];
 
 export const WaypointsProvider: React.FC = ({ children }) => {
   // Set intial state of when
@@ -69,8 +60,6 @@ export const WaypointsProvider: React.FC = ({ children }) => {
 
   // Pass state and dispatch in context and make accessible to children it wraps
   return (
-    <>
-      <WaypointsContext.Provider value={[state, dispatch]}>{children}</WaypointsContext.Provider>
-    </>
+    <WaypointsContext.Provider value={[state, dispatch]}>{children}</WaypointsContext.Provider>
   );
 };

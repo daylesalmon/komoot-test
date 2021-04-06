@@ -6,7 +6,7 @@ import WaypointList from './WaypointList/WaypointList';
 // Import styles
 import s from './LeftPane.module.scss';
 
-interface Waypoint{
+interface Waypoint {
   id: number;
   latlng: {
     lat: number;
@@ -27,9 +27,9 @@ const LeftPane = () => {
           ${waypoints
             .map(
               (waypoint: Waypoint, index: number) =>
-                `<trkpt lat="${waypoint.latlng.lat}" lon="${waypoint.latlng.lng}"><name>${
-                  index += 1
-                }</name></trkpt>`
+                `<trkpt lat="${waypoint.latlng.lat}" lon="${
+                  waypoint.latlng.lng
+                }"><name>${(index += 1)}</name></trkpt>`
             )
             .join('\n')}
         </trkseg>
