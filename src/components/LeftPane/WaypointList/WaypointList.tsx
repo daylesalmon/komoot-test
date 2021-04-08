@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import React, { useContext, useState } from 'react';
 // Import context
 import { WaypointsContext } from 'globalState/WaypointsContext';
 // Import components
@@ -50,8 +50,6 @@ const WaypointList = () => {
 
     const items = waypoints.filter((item: Waypoint) => item !== draggedItem); // filter out the currently dragged item
     if (draggedItem) items.splice(ind, 0, draggedItem); // add the dragged item after the dragged over item
-
-    console.log();
 
     waypointsDispatch({ type: 'REORDER_WAYPOINTS', payload: items }); // Update state with new order items
   };

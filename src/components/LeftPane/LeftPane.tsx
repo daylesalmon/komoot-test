@@ -1,10 +1,10 @@
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 // Import context
 import { WaypointsContext } from 'globalState/WaypointsContext';
 // Import components
+import { Waypoint } from 'globalState/WaypointsContext.d';
 import WaypointList from './WaypointList/WaypointList';
 // Types
-import { Waypoint } from 'globalState/WaypointsContext.d';
 // Import styles
 import s from './LeftPane.module.scss';
 
@@ -46,7 +46,7 @@ const LeftPane = () => {
       <hr className={s.hr} />
       <WaypointList />
       {waypoints.length > 0 && (
-        <button type="button" className={s.downloadRouteBtn} onClick={() => onClick()}>
+        <button type="button" className={s.downloadRouteBtn} onClick={onClick}>
           Download your route
         </button>
       )}

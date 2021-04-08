@@ -1,9 +1,10 @@
-import { useEffect, useRef, useContext } from 'react';
-import L, { map } from 'leaflet';
+import React, { useEffect, useRef, useContext } from 'react';
+import L from 'leaflet';
 // Import context
 import { WaypointsContext } from 'globalState/WaypointsContext';
 // Import styles
 import s from './Map.module.scss';
+import { Waypoint } from 'globalState/WaypointsContext.d';
 
 const Map = () => {
   const mapRef = useRef<L.Map | null>(null);
@@ -33,7 +34,7 @@ const Map = () => {
   // useEffect for click event/markers
   useEffect(() => {
     // Set onclick Event
-    const onMapClick = e => {
+    const onMapClick = (e: L.LeafletMouseEvent) => {
       const id = e.originalEvent.timeStamp; // Give each item a unique id based on click timestamp
       // Call waypoints dispatcher to add to state
       waypointsDispatch({
@@ -52,21 +53,20 @@ const Map = () => {
   // UseEffect for syncing state with map
   useEffect(() => {
     // Set up a divIcon
-    const icon = html => {
-      return L.divIcon({
+    const icon = (html: string) =>
+      L.divIcon({
         className: s.circleIcon,
-        iconSize: 30,
+        iconSize: [30, 30],
         html, // This will be set from the index below
       });
-    };
 
-    let layerGroup; // placeholder for layers
+    let layerGroup: L.LayerGroup; // placeholder for layers
 
     // If there are any waypoints in state
-    if (waypoints) {
+    if (waypoints && mapRef.current) {
       // Loop through each and create a marker, the markers html will be the index + 1
-      const waypointsArr = waypoints.map((wp, index) =>
-        L.marker(wp.latlng, { icon: icon(index + 1) }).addTo(mapRef.current)
+      const waypointsArr = waypoints.map((wp: Waypoint, index: number) =>
+        L.marker(wp.latlng, { icon: icon((index + 1).toString()) }).addTo(mapRef.current)
       );
       // Create marker at clicked point, and add divIcon created above
       layerGroup = L.layerGroup(waypointsArr).addTo(mapRef.current);
@@ -88,7 +88,7 @@ const Map = () => {
     return () => {
       polyline.remove();
     };
-  }, [waypoints]);
+  }, [mapRef, waypoints]);
 
   return <div id="map" className={s.map} ref={mapRef} title="Komoot map" />;
 };
