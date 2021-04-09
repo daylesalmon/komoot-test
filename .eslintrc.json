@@ -18,7 +18,8 @@
       {
         "wrapperName": ["sanitize"]
       }
-    ]
+    ],
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx", ".ts", ".tsx"] }]
   },
   "settings": {
     "import/resolver": {
@@ -26,10 +27,6 @@
         "moduleDirectory": ["node_modules", "src/"],
         "extensions": [".js", ".jsx", ".ts", ".tsx"]
       }
-    },
-    "react": {
-      "pragma": "React",
-      "version": "detect"
     }
   }
 }

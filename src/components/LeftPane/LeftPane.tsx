@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import * as React from 'react';
 // Import context
 import { WaypointsContext } from 'globalState/WaypointsContext';
 // Import components
@@ -9,7 +9,7 @@ import WaypointList from './WaypointList/WaypointList';
 import s from './LeftPane.module.scss';
 
 const LeftPane = () => {
-  const [waypoints] = useContext(WaypointsContext);
+  const [waypoints] = React.useContext(WaypointsContext);
 
   const onClick = () => {
     // Set up xml for gpx file (loop through each latlng and put in as a trkpnt / join '\n' so it adds new line rather than comma)
@@ -21,9 +21,9 @@ const LeftPane = () => {
           ${waypoints
             .map(
               (waypoint: Waypoint, index: number) =>
-                `<trkpt lat="${waypoint.latlng.lat}" lon="${
-                  waypoint.latlng.lng
-                }"><name>${(index += 1)}</name></trkpt>`
+                `<trkpt lat="${waypoint.latlng.lat}" lon="${waypoint.latlng.lng}"><name>${
+                  index + 1
+                }</name></trkpt>`
             )
             .join('\n')}
         </trkseg>

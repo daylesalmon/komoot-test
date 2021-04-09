@@ -3,14 +3,12 @@ import LeftPane from 'components/LeftPane/LeftPane';
 import Map from 'components/Map/Map';
 import { WaypointsProvider } from 'globalState/WaypointsContext';
 
-const App = () => {
-  return (
-    <React.StrictMode>
-      <WaypointsProvider>
-        <LeftPane /> <Map />
-      </WaypointsProvider>
-    </React.StrictMode>
-  );
-};
+const App = () => (
+  <React.StrictMode>
+    <WaypointsProvider>
+      <LeftPane /> <Map />
+    </WaypointsProvider>
+  </React.StrictMode>
+);
 
 export default App;
