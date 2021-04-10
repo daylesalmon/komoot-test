@@ -8,7 +8,7 @@ import WaypointList from './WaypointList/WaypointList';
 // Import styles
 import s from './LeftPane.module.scss';
 
-const LeftPane = () => {
+const LeftPane = (): JSX.Element => {
   const [waypoints] = React.useContext(WaypointsContext);
 
   const onClick = () => {

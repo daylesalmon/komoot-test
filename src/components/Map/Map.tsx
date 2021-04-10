@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useLayoutEffect, useRef, useContext } from 'react';
 import L from 'leaflet';
 // Import context
 import { WaypointsContext } from 'globalState/WaypointsContext';
@@ -6,32 +6,31 @@ import { WaypointsContext } from 'globalState/WaypointsContext';
 import { Waypoint } from 'globalState/WaypointsContext.d';
 import s from './Map.module.scss';
 
-const Map = () => {
-  const mapRef = React.useRef<L.Map>();
-  const [waypoints, waypointsDispatch] = React.useContext(WaypointsContext); // Get the state of waypoints from WaypointsContext
+const Map = (): JSX.Element => {
+  const mapRef = useRef<L.Map>();
+  const [waypoints, waypointsDispatch] = useContext(WaypointsContext); // Get the state of waypoints from WaypointsContext
 
   // useLayoutEffect to set map up
-  React.useLayoutEffect(() => {
-    if (!mapRef.current)
-      mapRef.current = L.map('map', {
-        center: [46.3605683, 13.8164072], // Center to Triglav
-        zoom: 16,
-        // Set layer to OSM (free)
-        layers: [
-          L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-          }),
-        ],
-      });
+  useLayoutEffect(() => {
+    mapRef.current = L.map('map', {
+      center: [46.3605683, 13.8164072], // Center to Triglav
+      zoom: 16,
+      // Set layer to OSM (free)
+      layers: [
+        L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+        }),
+      ],
+    });
 
     // remove map if 'unmount'
     return () => {
       if (mapRef.current) mapRef.current.remove();
     };
-  }, []);
+  }, [mapRef]);
 
   // useLayoutEffect for click event/markers
-  React.useLayoutEffect(() => {
+  useLayoutEffect(() => {
     // Set onclick Event
     const onMapClick = (e: L.LeafletMouseEvent) => {
       const id = e.originalEvent.timeStamp; // Give each item a unique id based on click timestamp
@@ -50,7 +49,7 @@ const Map = () => {
   }, [waypoints, waypointsDispatch]);
 
   // useLayoutEffect for syncing state with map
-  React.useLayoutEffect(() => {
+  useLayoutEffect(() => {
     let layerGroup: L.LayerGroup; // placeholder for layers
 
     if (waypoints && mapRef.current) {
@@ -77,7 +76,7 @@ const Map = () => {
   }, [waypoints, waypoints.length]);
 
   // useLayoutEffect for drawing polyLine
-  React.useLayoutEffect(() => {
+  useLayoutEffect(() => {
     let polyline: L.Polyline;
 
     if (mapRef.current) {
@@ -93,7 +92,7 @@ const Map = () => {
     };
   }, [mapRef, waypoints]);
 
-  return <div id="map" className={s.map} ref={mapRef} title="Komoot map" />;
+  return <div id="map" className={s.map} title="Komoot map" />;
 };
 
 export default Map;

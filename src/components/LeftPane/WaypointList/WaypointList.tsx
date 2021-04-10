@@ -8,18 +8,14 @@ import { Waypoint } from 'globalState/WaypointsContext.d';
 // Import styles
 import s from './WaypointList.module.scss';
 
-type ParentNode = HTMLElement | undefined;
+// type ParentNode = HTMLElement;
 
-interface OnDragEvent<T> extends React.DragEvent<T> {
-  target:
-    | {
-        parentNode?: ParentNode;
-      }
-    | any;
-  parentNode?: ParentNode;
+interface OnDragEvent<T = HTMLElement> extends React.DragEvent<T> {
+  parentNode?: T;
+  target: EventTarget & { parentNode?: T };
 }
 
-const WaypointList = () => {
+const WaypointList = (): JSX.Element => {
   const [waypoints, waypointsDispatch] = useContext(WaypointsContext); // Get the state of waypoints from WaypointsContext
 
   // State for managing dragable list below
@@ -28,18 +24,18 @@ const WaypointList = () => {
 
   // DRAG EVENTS FOR LIST REORDERING
   // Dragstart
-  const onDragStart = (e: OnDragEvent<HTMLDivElement>, ind: number) => {
+  const onDragStart = (e: OnDragEvent<HTMLElement>, ind: number) => {
     setDraggedItem(waypoints[ind]);
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData(
       'text/html',
       typeof e.parentNode !== 'undefined' ? e.parentNode.toString() : ''
     );
-    e.dataTransfer.setDragImage(e.target.parentNode, 20, 20);
+    if (e.target.parentNode) e.dataTransfer.setDragImage(e.target.parentNode, 20, 20);
   };
 
   // Dragover
-  const onDragOver = (e: OnDragEvent<HTMLDivElement | HTMLLIElement>, ind: number) => {
+  const onDragOver = (e: OnDragEvent<HTMLElement | HTMLLIElement>, ind: number) => {
     e.preventDefault(); // This allows the draggedover to be dropped on
     const draggedOverItem = waypoints[ind]; // Set dragged over to the index it is in state
 

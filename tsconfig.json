@@ -1,36 +1,27 @@
 {
   "compilerOptions": {
-    "baseUrl": "src/",
-    "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "target": "es5", // compile to ES2015
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
+    "baseUrl": "src", // enables you to import relative to this folder
     "skipLibCheck": true,
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "strict": true,
+    "allowSyntheticDefaultImports": true, // ES2015 style default imports even when the code you're importing doesn't have an ES2015 default export.
+    "strict": true, // Turn on noImplicitAny and strictNullChecks
     "forceConsistentCasingInFileNames": true,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "isolatedModules": true,
-    "resolveJsonModule": true,
-    "noEmit": true,
-    "jsx": "react-jsx",
-    "sourceMap": true,
-    "declaration": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "incremental": true,
-    "noFallthroughCasesInSwitch": true
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "module": "esnext", // use latest ES modules
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx"
   },
-  "include": [
-    "src"
-  ],
+  "include": ["src"],
   "exclude": [
-    "node_modules",
-    "build"
+    "node_modules" // don't run on any code in the node_modules directory
   ]
 }

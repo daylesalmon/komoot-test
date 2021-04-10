@@ -22,7 +22,7 @@ const intialContextState: WaypointsContextState = [[], () => null];
 
 export const WaypointsContext = createContext<WaypointsContextState>(intialContextState); // Create when context
 
-export const WaypointsProvider = ({ children }: WayPointsProviderProps) => {
+export const WaypointsProvider = ({ children }: WayPointsProviderProps): JSX.Element => {
   // Set intial state of when
   const initialState: Waypoints = [];
 
