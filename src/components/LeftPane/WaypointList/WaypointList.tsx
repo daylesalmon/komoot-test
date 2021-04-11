@@ -19,7 +19,7 @@ const WaypointList = (): JSX.Element => {
   const [waypoints, waypointsDispatch] = useContext(WaypointsContext); // Get the state of waypoints from WaypointsContext
 
   // State for managing dragable list below
-  const [draggedItem, setDraggedItem] = useState<null | Waypoint>(null);
+  const [draggedItem, setDraggedItem] = useState<Waypoint | null>(null);
   const [dragEntered, setDragEntered] = useState(false);
 
   // DRAG EVENTS FOR LIST REORDERING

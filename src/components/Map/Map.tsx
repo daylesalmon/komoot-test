@@ -7,7 +7,7 @@ import { Waypoint } from 'globalState/WaypointsContext.d';
 import s from './Map.module.scss';
 
 const Map = (): JSX.Element => {
-  const mapRef = useRef<L.Map>();
+  const mapRef = useRef<L.Map | null>(null);
   const [waypoints, waypointsDispatch] = useContext(WaypointsContext); // Get the state of waypoints from WaypointsContext
 
   // useLayoutEffect to set map up
@@ -27,7 +27,7 @@ const Map = (): JSX.Element => {
     return () => {
       if (mapRef.current) mapRef.current.remove();
     };
-  }, [mapRef]);
+  }, []);
 
   // useLayoutEffect for click event/markers
   useLayoutEffect(() => {
@@ -46,7 +46,7 @@ const Map = (): JSX.Element => {
     return () => {
       if (mapRef.current) mapRef.current.off('click', onMapClick); // Remove map click event handler
     };
-  }, [waypoints, waypointsDispatch]);
+  }, [waypointsDispatch]);
 
   // useLayoutEffect for syncing state with map
   useLayoutEffect(() => {
@@ -90,7 +90,7 @@ const Map = (): JSX.Element => {
     return () => {
       polyline.remove();
     };
-  }, [mapRef, waypoints]);
+  }, [waypoints]);
 
   return <div id="map" className={s.map} title="Komoot map" />;
 };
