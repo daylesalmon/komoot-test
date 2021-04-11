@@ -1,11 +1,11 @@
 import svgSprite from 'assets/icons/icons-sprite.svg';
 
-interface IconProps {
+type Props = {
   className?: string;
   iconName: string;
-}
+};
 
-const Icon = ({ className = 'abc', iconName }: IconProps): JSX.Element => (
+const Icon = ({ className, iconName }: Props): JSX.Element => (
   <svg className={className}>
     <use xlinkHref={`${svgSprite}#${iconName}`} href={`${svgSprite}#${iconName}`} />
   </svg>
