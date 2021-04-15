@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useContext } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import L from 'leaflet';
 // Import context
 import { WaypointsContext } from 'globalState/WaypointsContext';
@@ -7,30 +7,38 @@ import { Waypoint } from 'globalState/WaypointsContext.d';
 import s from './Map.module.scss';
 
 const Map = (): JSX.Element => {
-  const mapRef = useRef<L.Map | null>(null);
+  const [mapState, setMapState] = useState<L.Map | null>(null);
   const [waypoints, waypointsDispatch] = useContext(WaypointsContext); // Get the state of waypoints from WaypointsContext
 
-  // useLayoutEffect to set map up
-  useLayoutEffect(() => {
-    mapRef.current = L.map('map', {
-      center: [46.3605683, 13.8164072], // Center to Triglav
-      zoom: 16,
-      // Set layer to OSM (free)
-      layers: [
-        L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-          attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-        }),
-      ],
-    });
+  // useEffect to set map up
+  useEffect(() => {
+    let map: typeof mapState;
+
+    if (!mapState) {
+      map = L.map('map', {
+        center: [46.3605683, 13.8164072], // Center to Triglav
+        zoom: 16,
+        // Set layer to OSM (free)
+        layers: [
+          L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+          }),
+        ],
+      });
+
+      setMapState(map);
+    }
 
     // remove map if 'unmount'
     return () => {
-      if (mapRef.current) mapRef.current.remove();
+      if (mapState) {
+        mapState.remove();
+      }
     };
-  }, []);
+  }, [mapState]);
 
   // useLayoutEffect for click event/markers
-  useLayoutEffect(() => {
+  useEffect(() => {
     // Set onclick Event
     const onMapClick = (e: L.LeafletMouseEvent) => {
       const id = e.originalEvent.timeStamp; // Give each item a unique id based on click timestamp
@@ -41,56 +49,54 @@ const Map = (): JSX.Element => {
       });
     };
 
-    if (mapRef.current) mapRef.current.on('click', onMapClick); // Event handler for map click
+    if (mapState) mapState.on('click', onMapClick); // Event handler for map click
 
     return () => {
-      if (mapRef.current) mapRef.current.off('click', onMapClick); // Remove map click event handler
+      if (mapState) mapState.off('click', onMapClick); // Remove map click event handler
     };
-  }, [waypointsDispatch]);
+  }, [mapState, waypointsDispatch]);
 
-  // useLayoutEffect for syncing state with map
-  useLayoutEffect(() => {
+  // useEffect for syncing state with map
+  useEffect(() => {
     let layerGroup: L.LayerGroup; // placeholder for layers
 
-    if (waypoints && mapRef.current) {
-      // Set up a divIcon
-      const icon = (html: string) =>
-        L.divIcon({
-          className: s.circleIcon,
-          iconSize: [30, 30],
-          html, // This will be set from the index below
-        });
+    // Set up a divIcon
+    const icon = (html: string) =>
+      L.divIcon({
+        className: s.circleIcon,
+        iconSize: [30, 30],
+        html, // This will be set from the index below
+      });
 
-      // If there are any waypoints in state
-      // Loop through each and create a marker, the markers html will be the index + 1
-      const waypointsArr = waypoints.map((wp: Waypoint, index: number) =>
-        L.marker(wp.latlng, { icon: icon((index + 1).toString()) })
-      );
-      // Create marker at clicked point, and add divIcon created above
-      layerGroup = L.layerGroup(waypointsArr).addTo(mapRef.current);
-    }
+    // If there are any waypoints in state
+    // Loop through each and create a marker, the markers html will be the index + 1
+    const waypointsArr = waypoints.map((wp: Waypoint, index: number) =>
+      L.marker(wp.latlng, { icon: icon((index + 1).toString()) })
+    );
+    // Create marker at clicked point, and add divIcon created above
+    if (mapState) layerGroup = L.layerGroup(waypointsArr).addTo(mapState);
 
     return () => {
-      layerGroup.clearLayers(); // Clear layers on unmount/update
+      if (layerGroup && mapState) layerGroup.clearLayers(); // Clear layers on unmount/update
     };
-  }, [waypoints, waypoints.length]);
+  }, [mapState, waypoints]);
 
-  // useLayoutEffect for drawing polyLine
-  useLayoutEffect(() => {
+  // useEffect for drawing polyLine
+  useEffect(() => {
     let polyline: L.Polyline;
 
-    if (mapRef.current) {
+    if (mapState) {
       // Add polyline based on the coords in state
       polyline = L.polyline(
         waypoints.map((point: Waypoint) => point.latlng),
         { color: '#0d8ce7', weight: 10 }
-      ).addTo(mapRef.current);
+      ).addTo(mapState);
     }
 
     return () => {
-      polyline.remove();
+      if (polyline && mapState) polyline.remove();
     };
-  }, [waypoints]);
+  }, [mapState, waypoints]);
 
   return <div id="map" className={s.map} title="Komoot map" />;
 };
